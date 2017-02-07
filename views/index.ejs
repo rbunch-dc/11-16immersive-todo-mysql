@@ -40,6 +40,13 @@
 			<table class="table">
 				<% if (taskArray.length === 0){ %>
 					<tr><td>Your task list is currently empty. Add a task and get busy!</td></tr>
+				<% }else{ %>
+					<% taskArray.map((task, index)=>{ %>
+						<tr>
+							<td><%= task.task_name %></td>
+							<td><%= task.task_date %></td>
+						</tr>
+					<% }); %>
 				<% } %>
 			</table>
 		</div>		

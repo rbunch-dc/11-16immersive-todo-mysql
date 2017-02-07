@@ -17,9 +17,14 @@ connection.connect();
 router.get('/', function(req, res, next) {
 
 	//Init array as a placeholder
-	var taskArray = [];
+	// var taskArray = [];
 
-	res.render('index', { taskArray: taskArray });
+	var selectQuery = "SELECT * FROM tasks";
+
+	connection.query(selectQuery, (error, results, field)=>{
+		// res.json(results);
+		res.render('index', { taskArray: results });
+	})
 });
 
 router.post('/addNew', (req, res, next)=>{
@@ -27,11 +32,11 @@ router.post('/addNew', (req, res, next)=>{
 	var newTask = req.body.newTaskString;
 	var taskDate = req.body.newTaskDate;
 // We have a MySQL conncetion... called connection!
-	var query = "INSERT INTO tasks (task_name, task_date) VALUES ('"+newTask+"','"+taskDate+"')";
+	var insertQuery = "INSERT INTO tasks (task_name, task_date) VALUES ('"+newTask+"','"+taskDate+"')";
 	
-	// res.send(query);
+	// res.send(insertQuery);
 
-	connection.query(query, (error, results, field)=>{
+	connection.query(insertQuery, (error, results, field)=>{
 		if (error) throw error;
 		res.redirect('/');
 	});
