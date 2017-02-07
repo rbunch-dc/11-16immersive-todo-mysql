@@ -3,7 +3,11 @@ var router = express.Router();
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.render('index', { title: 'Express' });
+
+	//Init array as a placeholder
+	var taskArray = [];
+
+	res.render('index', { taskArray: taskArray });
 });
 
 module.exports = router;
