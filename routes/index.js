@@ -19,11 +19,17 @@ router.get('/', function(req, res, next) {
 	//Init array as a placeholder
 	// var taskArray = [];
 
+	// See if there is a message in the query string!
+	var msg = req.query.msg;
+	if(msg === 'updated'){
+		msg = "Your post has been updated";
+	}
+	// res.send(msg);
 	var selectQuery = "SELECT * FROM tasks";
 
 	connection.query(selectQuery, (error, results, field)=>{
 		// res.json(results);
-		res.render('index', { taskArray: results });
+		res.render('index', { taskArray: results, msg: msg });
 	})
 });
 
@@ -76,18 +82,23 @@ router.post('/edit/:id', (req, res, next)=>{
 	var taskDate = req.body.newTaskDate;
 
 	var updateQuery = "UPDATE tasks SET task_name='"+newTask+"', task_date='"+taskDate+"' WHERE ID = "+id;
-	res.send(updateQuery);
+	// res.send(updateQuery);
+	connection.query(updateQuery, (error, results, fields)=>{
+		if (error) throw error;
+		res.redirect('/?msg=updated');
+	});
+
 });
 
 /////////////DELETE GET//////////////////
 router.get('/delete/:id', (req, res, next)=>{
-	var selectQuery = "SELECT * FROM tasks WHERE id ="+req.params.id;
+	var deleteQuery = "DELETE FROM tasks WHERE id ="+req.params.id;
+	connection.query(deleteQuery, (error, results, fields)=>{
+		if(error) throw error;
+		res.redirect('/');
+	})
 	// res.send(req.params.id);
 });
 
-/////////////DELETE POST//////////////////
-router.post('/delete/:id', (req, res, next)=>{
-	res.send(req.params.id);
-});
 
 module.exports = router;
